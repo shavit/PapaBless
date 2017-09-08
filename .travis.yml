@@ -1,0 +1,14 @@
+language: android
+android:
+  components:
+    - tools
+    - platform-tools
+    - android-16
+before_script:
+  - mkdir -p $ANDROID_HOME/licenses
+  - echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
+  - echo "d975f751698a77b662f1254ddbeed3901e976f5a" > $ANDROID_HOME/licenses/intel-android-extra-license
+script: 
+  - ./gradlew test
+  - ./gradlew testDebugUnitTest
+  - ./gradlew testReleaseUnitTest
