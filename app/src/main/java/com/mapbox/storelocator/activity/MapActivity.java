@@ -62,7 +62,7 @@ import static com.mapbox.storelocator.util.StringConstants.SELECTED_THEME;
 /**
  * Activity with a Mapbox map and recyclerview to view various locations
  */
-public class MapActivity extends AppCompatActivity implements LocationRecyclerViewAdapter.ClickListener {
+public class  MapActivity extends AppCompatActivity implements LocationRecyclerViewAdapter.ClickListener {
 
   private static final LatLngBounds LOCKED_MAP_CAMERA_BOUNDS = new LatLngBounds.Builder()
     .include(new LatLng(40.87096725853152, -74.08277394720501))
@@ -508,13 +508,21 @@ public class MapActivity extends AppCompatActivity implements LocationRecyclerVi
           selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_selected_house);
           mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.neutral_orange_user_location);
           break;
+//          TODO: Delete the section below and uncomment the original
         case R.style.AppTheme_Gray:
           mapboxMap.setStyle(Style.LIGHT);
           navigationLineColor = getResources().getColor(R.color.navigationRouteLine_gray);
-          unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.white_unselected_bike);
-          selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_selected_bike);
+          unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless);
+          selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless_selected);
           mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_user_location);
           break;
+//          TODO: Uncomment this original style
+//          mapboxMap.setStyle(Style.LIGHT);
+//          navigationLineColor = getResources().getColor(R.color.navigationRouteLine_gray);
+//          unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.white_unselected_bike);
+//          selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_selected_bike);
+//          mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_user_location);
+//          break;
       }
     }
 
