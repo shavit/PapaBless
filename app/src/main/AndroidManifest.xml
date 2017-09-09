@@ -15,11 +15,9 @@
         <meta-data
             android:name="com.google.geo.API_KEY"
             android:value="AIzaSyBzaZ7hdIYoZAS5jmn10I0951Pju0CSxS4" />
-        <activity android:name="com.mapbox.storelocator.activity.MapActivity"/>
-        <activity android:name="com.mapbox.storelocator.activity.ThemePickerActivity">
+        <activity android:name="com.mapbox.storelocator.activity.MapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

@@ -35,4 +35,11 @@
         <item name="colorAccent">@color/colorAccent_gray</item>
     </style>
 
+    <!--Papa Bless theme -->
+    <style name="AppTheme.PapaBless" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary_green</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_green</item>
+        <item name="colorAccent">@color/colorAccent_green</item>
+    </style>
+
 </resources>
