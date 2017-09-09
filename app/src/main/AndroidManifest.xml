@@ -12,6 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Gray">
+        <meta-data
+            android:name="com.google.geo.API_KEY"
+            android:value="AIzaSyBzaZ7hdIYoZAS5jmn10I0951Pju0CSxS4" />
         <activity android:name="com.mapbox.storelocator.activity.MapActivity"/>
         <activity android:name="com.mapbox.storelocator.activity.ThemePickerActivity">
             <intent-filter>
