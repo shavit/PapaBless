@@ -128,11 +128,12 @@ public class LocationRecyclerViewAdapter extends
           .41f);
         break;
       case R.style.AppTheme_PapaBless:
-        emojiForCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.house_icon, null);
+        emojiForCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.icon_papabless, null);
         backgroundCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.white_circle, null);
-        setColors(R.color.colorPrimaryDark_neutral, R.color.black, R.color.black, R.color.black,
-                R.color.black, R.color.black,
-                R.color.black, R.color.black, R.color.black);
+        setColors(R.color.colorPrimaryRed_neutral,
+                R.color.white, R.color.white, R.color.black,
+                R.color.black, R.color.black, R.color.black,
+                R.color.white, R.color.white);
         setAlphas(card, .37f, .37f, 100f, .37f,
                 100f,
                 .37f);
@@ -155,6 +156,7 @@ public class LocationRecyclerViewAdapter extends
   private void setColors(int colorForUpperCard, int colorForName, int colorForAddress,
                          int colorForHours, int colorForHoursHeader, int colorForPhoneNum,
                          int colorForPhoneHeader, int colorForDistanceNum, int colorForMilesAbbreviation) {
+
     upperCardSectionColor = ResourcesCompat.getColor(context.getResources(), colorForUpperCard, null);
     locationNameColor = ResourcesCompat.getColor(context.getResources(), colorForName, null);
     locationAddressColor = ResourcesCompat.getColor(context.getResources(), colorForAddress, null);

@@ -38,6 +38,9 @@
     <color name="navigationRouteLine_gray">#696969</color>
     <color name="cardHourAndPhoneTextColor_gray">#696969</color>
 
+    // PapaBless theme's colors
+    <color name="colorPrimaryRed_neutral">#1C9FEB</color>
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 
