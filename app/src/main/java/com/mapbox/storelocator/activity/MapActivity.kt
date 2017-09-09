@@ -248,8 +248,9 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
         // R.style.AppTheme_Green
         // R.style.AppTheme_Neutral
         // R.style.AppTheme_Gray
+        // R.style.AppTheme_PapaBless
 
-        return R.style.AppTheme_Blue
+        return R.style.AppTheme_PapaBless
     }
 
     private fun repositionMapCamera(newTarget: LatLng) {
@@ -502,11 +503,11 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
                     mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_user_location);
                 }
                 R.style.AppTheme_PapaBless -> {
-                    mapboxMap.setStyle(getString(R.string.terminal_map_style))
-                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_green)
+                    mapboxMap.setStyle(Style.MAPBOX_STREETS)
+                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_neutral)
                     unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless)
                     selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless_selected)
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.green_user_location)
+                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.neutral_orange_user_location)
                 }
 
             }

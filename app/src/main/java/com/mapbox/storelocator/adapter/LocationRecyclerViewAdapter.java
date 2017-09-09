@@ -127,6 +127,16 @@ public class LocationRecyclerViewAdapter extends
           100f,
           .41f);
         break;
+      case R.style.AppTheme_PapaBless:
+        emojiForCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.house_icon, null);
+        backgroundCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.white_circle, null);
+        setColors(R.color.colorPrimaryDark_neutral, R.color.black, R.color.black, R.color.black,
+                R.color.black, R.color.black,
+                R.color.black, R.color.black, R.color.black);
+        setAlphas(card, .37f, .37f, 100f, .37f,
+                100f,
+                .37f);
+        break;
     }
 
     card.emojiImageView.setImageDrawable(emojiForCircle);
