@@ -3,12 +3,10 @@ package com.mapbox.storelocator.activity
 import android.content.Context
 import android.graphics.Color
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SnapHelper
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
@@ -29,13 +27,11 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.services.api.directions.v5.DirectionsCriteria
 import com.mapbox.services.api.directions.v5.MapboxDirections
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute
 import com.mapbox.services.api.utils.turf.TurfHelpers
-import com.mapbox.services.commons.geojson.Feature
 import com.mapbox.services.commons.geojson.FeatureCollection
 import com.mapbox.services.commons.geojson.LineString
 import com.mapbox.services.commons.models.Position
@@ -45,7 +41,6 @@ import com.mapbox.storelocator.model.IndividualLocation
 import com.mapbox.storelocator.util.LinearLayoutManagerWithSmoothScroller
 
 import java.io.IOException
-import java.io.InputStream
 import java.text.DecimalFormat
 import java.util.ArrayList
 
@@ -280,20 +275,6 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
     }
 
     private fun loadGeoJsonFromAsset(filename: String): String? {
-//        try {
-            // Load the GeoJSON file from the local asset folder
-//            val `is` = assets.open(filename)
-//            val size = `is`.available()
-//            val buffer = ByteArray(size)
-//            `is`.read(buffer)
-//            `is`.close()
-//            return String(buffer, "UTF-8")
-//        } catch (exception: Exception) {
-//            Log.e("MapActivity", "Exception Loading GeoJSON: " + exception.toString())
-//            exception.printStackTrace()
-//            return null
-//        }
-
         var res: String? = null
         try {
             val f = assets.open(filename)
@@ -503,7 +484,7 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
                     mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_user_location);
                 }
                 R.style.AppTheme_PapaBless -> {
-                    mapboxMap.setStyle(Style.MAPBOX_STREETS)
+                    mapboxMap.setStyle(getString(R.string.papa_bless_map_style))
                     navigationLineColor = resources.getColor(R.color.navigationRouteLine_neutral)
                     unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless)
                     selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless_selected)
@@ -523,12 +504,11 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
     }
 
     companion object {
-
         private val LOCKED_MAP_CAMERA_BOUNDS = LatLngBounds.Builder()
-                .include(LatLng(40.87096725853152, -74.08277394720501))
-                .include(LatLng(40.67035340371385,
-                        -73.87063900287112)).build()
-        private val MOCK_DEVICE_LOCATION_LAT_LNG = LatLng(40.713469, -74.006735)
+            .include(LatLng(51.412056,-57.260742))
+            .include(LatLng(12.538749,-148.103516))
+            .build()
+        private val MOCK_DEVICE_LOCATION_LAT_LNG = LatLng(34.082676, -118.366671)
         private val MAPBOX_LOGO_OPACITY = 75
         private val CAMERA_MOVEMENT_SPEED_IN_MILSECS = 1200
         private val NAVIGATION_LINE_WIDTH = 9f

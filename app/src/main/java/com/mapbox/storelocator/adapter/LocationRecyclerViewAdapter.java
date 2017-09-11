@@ -130,9 +130,10 @@ public class LocationRecyclerViewAdapter extends
       case R.style.AppTheme_PapaBless:
         emojiForCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.icon_papabless, null);
         backgroundCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.white_circle, null);
-        setColors(R.color.colorPrimaryRed_neutral,
-                R.color.white, R.color.white, R.color.black,
-                R.color.black, R.color.black, R.color.black,
+        setColors(R.color.colorPrimaryGreen_neutral,
+                R.color.white, R.color.white,
+                R.color.colorPrimaryGreen_text, R.color.colorPrimaryGreen_neutral,
+                R.color.colorPrimaryGreen_text, R.color.colorPrimaryGreen_neutral,
                 R.color.white, R.color.white);
         setAlphas(card, .37f, .37f, 100f, .37f,
                 100f,

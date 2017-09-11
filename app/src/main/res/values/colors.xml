@@ -40,6 +40,8 @@
 
     // PapaBless theme's colors
     <color name="colorPrimaryRed_neutral">#1C9FEB</color>
+    <color name="colorPrimaryGreen_neutral">#208172</color>
+    <color name="colorPrimaryGreen_text">#1C3D38</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
