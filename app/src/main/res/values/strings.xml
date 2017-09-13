@@ -1,8 +1,8 @@
 <resources>
-    <string name="final_app_name">Store Locator</string>
-    <!-- Add your Mapbox access token in between >REPLACE_WITH_MAPBOX_ACCESS_TOKEN< in the
-    line below. Your token can be retrieved at https://www.mapbox.com/studio/account/tokens/
-    -->
+    <string name="final_app_name">Papa Bless</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Find a place near you</string>
+
     <string name="access_token" translatable="false">pk.eyJ1Ijoic2hhdml0dHp1cmllbCIsImEiOiJjajdjYzBoemIwMWp1MzNwZGVmYmJtZ3dmIn0.kwouxuRTfHAiG96dyIbVPQ</string>
     <string name="purple_map_style" translatable="false">mapbox://styles/mapbox/cj7bww7is2f4i2rnwyxkzpwu7</string>
     <string name="blue_map_style" translatable="false">mapbox://styles/mapbox/cj7bwwv3caf7l2spgukxm8bwv</string>

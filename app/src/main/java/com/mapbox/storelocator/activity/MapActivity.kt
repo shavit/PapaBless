@@ -1,7 +1,6 @@
 package com.mapbox.storelocator.activity
 
 import android.content.Context
-import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -12,21 +11,15 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
-
-import com.mapbox.androidsdk.plugins.building.BuildingPlugin
 import com.mapbox.mapboxsdk.Mapbox
-import com.mapbox.mapboxsdk.annotations.Icon
-import com.mapbox.mapboxsdk.annotations.IconFactory
-import com.mapbox.mapboxsdk.annotations.Marker
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
-import com.mapbox.mapboxsdk.annotations.PolylineOptions
+import com.mapbox.mapboxsdk.annotations.*
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.constants.Style
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.services.Constants.PRECISION_6
 import com.mapbox.services.api.directions.v5.DirectionsCriteria
 import com.mapbox.services.api.directions.v5.MapboxDirections
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse
@@ -39,17 +32,13 @@ import com.mapbox.storelocator.R
 import com.mapbox.storelocator.adapter.LocationRecyclerViewAdapter
 import com.mapbox.storelocator.model.IndividualLocation
 import com.mapbox.storelocator.util.LinearLayoutManagerWithSmoothScroller
-
-import java.io.IOException
-import java.text.DecimalFormat
-import java.util.ArrayList
-
+import com.mapbox.storelocator.util.mDirectionsBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-import com.mapbox.services.Constants.PRECISION_6
-import com.mapbox.storelocator.util.mDirectionsBuilder
+import java.io.IOException
+import java.text.DecimalFormat
+import java.util.*
 
 /**
  * Activity with a Mapbox map and recyclerview to view various locations
@@ -64,7 +53,6 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
     private var listOfIndividualLocations: ArrayList<IndividualLocation>? = null
     private var customThemeManager: CustomThemeManager? = null
     private var styleRvAdapter: LocationRecyclerViewAdapter? = null
-    private var chosenTheme: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,9 +79,6 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
         // Initialize a list of IndividualLocation objects for future use with recyclerview
         listOfIndividualLocations = ArrayList()
 
-        // Initialize the theme that was selected in the previous activity. The blue theme is set as the backup default.
-        chosenTheme = getChosenTheme()
-
         // Set up the Mapbox map
         mapView = findViewById(R.id.mapView)
         mapView!!.onCreate(savedInstanceState)
@@ -102,8 +87,7 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
             this@MapActivity.mapboxMap = mapboxMap
 
             // Initialize the custom class that handles marker icon creation and map styling based on the selected theme
-            customThemeManager = CustomThemeManager(chosenTheme, this@MapActivity, mapView!!, mapboxMap)
-            customThemeManager!!.initializeTheme()
+            customThemeManager = CustomThemeManager(this@MapActivity, mapView!!, mapboxMap)
 
             // Adjust the opacity of the Mapbox logo in the lower left hand corner of the map
             val logo = mapView!!.findViewById<ImageView>(R.id.logoView)
@@ -117,7 +101,6 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
 
             // Loop through the locations to add markers to the map
             for (x in featureList.indices) {
-
                 val singleLocation = featureList[x]
 
                 // Get the single location's String properties to place in its map marker
@@ -130,8 +113,16 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
                 val singleLocationPosition = singleLocation.geometry.coordinates as Position
 
                 // Create a new LatLng object with the Position object created above
-                val singleLocationLatLng = LatLng(singleLocationPosition.latitude,
-                        singleLocationPosition.longitude)
+                var singleLocationLatLng: LatLng? = null
+                try {
+                    singleLocationLatLng = LatLng(singleLocationPosition.latitude,
+                            singleLocationPosition.longitude)
+                } catch (e: Exception){
+                    println(x)
+                    println(singleLocation)
+                    println(e)
+                    break
+                }
 
                 // Add the location to the Arraylist of locations for later use in the recyclerview
                 listOfIndividualLocations!!.add(IndividualLocation(
@@ -160,7 +151,7 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
 
             setUpMarkerClickListener()
 
-            setUpRecyclerViewOfLocationCards(chosenTheme)
+            setUpRecyclerViewOfLocationCards()
         }
     }
 
@@ -190,8 +181,9 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
     private fun getInformationFromDirectionsApi(destinationLatCoordinate: Double, destinationLongCoordinate: Double,
                                                 fromMarkerClick: Boolean, listIndex: Int?) {
         // Set up origin and destination coordinates for the call to the Mapbox Directions API
-        val mockCurrentLocation = Position.fromLngLat(MOCK_DEVICE_LOCATION_LAT_LNG.longitude,
-                MOCK_DEVICE_LOCATION_LAT_LNG.latitude)
+        val deviceLocation = MOCK_DEVICE_LOCATION_LAT_LNG
+        val mockCurrentLocation = Position.fromLngLat(deviceLocation.longitude,
+                deviceLocation.latitude)
         val destinationMarker = Position.fromLngLat(destinationLongCoordinate, destinationLatCoordinate)
 
         // Initialize the directionsApiClient object for eventually drawing a navigation route on the map
@@ -237,17 +229,6 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
         })
     }
 
-    private fun getChosenTheme(): Int {
-        // R.style.AppTheme_Purple
-        // R.style.AppTheme_Blue
-        // R.style.AppTheme_Green
-        // R.style.AppTheme_Neutral
-        // R.style.AppTheme_Gray
-        // R.style.AppTheme_PapaBless
-
-        return R.style.AppTheme_PapaBless
-    }
-
     private fun repositionMapCamera(newTarget: LatLng) {
         val newCameraPosition = CameraPosition.Builder()
                 .target(newTarget)
@@ -291,13 +272,13 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
         return res
     }
 
-    private fun setUpRecyclerViewOfLocationCards(chosenTheme: Int) {
+    private fun setUpRecyclerViewOfLocationCards() {
         // Initialize the recyclerview of location cards and a custom class for automatic card scrolling
         locationsRecyclerView = findViewById(R.id.map_layout_rv)
         locationsRecyclerView!!.setHasFixedSize(true)
         locationsRecyclerView!!.layoutManager = LinearLayoutManagerWithSmoothScroller(this)
         styleRvAdapter = LocationRecyclerViewAdapter(listOfIndividualLocations,
-                applicationContext, this, chosenTheme)
+                applicationContext, this)
         locationsRecyclerView!!.adapter = styleRvAdapter
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(locationsRecyclerView)
@@ -305,24 +286,19 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
 
     private fun setUpMarkerClickListener() {
         mapboxMap!!.setOnMarkerClickListener { marker ->
-            // Get the position of the selected marker
-            val positionOfSelectedMarker = marker.position
-
-            // Check that the selected marker isn't the mock device location marker
-            if (marker.position != MOCK_DEVICE_LOCATION_LAT_LNG) {
-
-                for (x in 0..mapboxMap!!.markers.size - 1) {
-                    if (mapboxMap!!.markers[x].position === positionOfSelectedMarker) {
-                        // Scroll the recyclerview to the selected marker's card. It's "x-1" below because
-                        // the mock device location marker is part of the marker list but doesn't have its own card
-                        // in the actual recyclerview.
-                        locationsRecyclerView!!.smoothScrollToPosition(x)
-                    }
-                }
-                adjustMarkerSelectStateIcons(marker)
-            }
+            moveCameraToSelectedMarker(marker)
             // Return true so that the selected marker's info window doesn't pop up
             true
+        }
+    }
+
+    private fun moveCameraToSelectedMarker(p0: Marker){
+        if (p0.position != MOCK_DEVICE_LOCATION_LAT_LNG) {
+            val cardIndex: Int = mapboxMap!!.markers
+                    .indexOfFirst { it -> it.position == p0.position }
+
+            locationsRecyclerView!!.smoothScrollToPosition(cardIndex)
+            adjustMarkerSelectStateIcons(p0)
         }
     }
 
@@ -435,72 +411,18 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
     /**
      * Custom class which creates marker icons and colors based on the selected theme
      */
-    internal inner class CustomThemeManager(private val selectedTheme: Int, private val context: Context,
+    internal inner class CustomThemeManager(private val context: Context,
                                             private val mapView: MapView, private val mapboxMap: MapboxMap) {
-        var unselectedMarkerIcon: Icon? = null
-        var selectedMarkerIcon: Icon? = null
-        var mockLocationIcon: Icon? = null
-        var navigationLineColor: Int = 0
+        var unselectedMarkerIcon: Icon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless)
+        var selectedMarkerIcon: Icon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless_selected)
+        var mockLocationIcon: Icon = IconFactory.getInstance(context).fromResource(R.drawable.neutral_orange_user_location)
+        var navigationLineColor: Int = resources.getColor(R.color.navigationRouteLine_neutral)
 
-        private val BUILDING_EXTRUSION_COLOR = "#c4dbed"
-        private val BUILDING_EXTRUSION_OPACITY = .8f
-
-        fun initializeTheme() {
-            when (selectedTheme) {
-                R.style.AppTheme_Blue -> {
-                    mapboxMap.setStyle(getString(R.string.blue_map_style))
-                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_blue)
-                    unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.blue_unselected_ice_cream)
-                    selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.blue_selected_ice_cream)
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.blue_user_location)
-                    showBuildingExtrusions()
-                }
-                R.style.AppTheme_Purple -> {
-                    mapboxMap.setStyle(getString(R.string.purple_map_style))
-                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_purple)
-                    unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.purple_unselected_burger)
-                    selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.purple_selected_burger)
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.purple_user_location)
-                }
-                R.style.AppTheme_Green -> {
-                    mapboxMap.setStyle(getString(R.string.terminal_map_style))
-                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_green)
-                    unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.green_unselected_money)
-                    selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.green_selected_money)
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.green_user_location)
-                }
-                R.style.AppTheme_Neutral -> {
-                    mapboxMap.setStyle(Style.MAPBOX_STREETS)
-                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_neutral)
-                    unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.white_unselected_house)
-                    selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_selected_house)
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.neutral_orange_user_location)
-                }
-                R.style.AppTheme_Gray -> {
-                    mapboxMap.setStyle(Style.LIGHT);
-                    navigationLineColor = getResources().getColor(R.color.navigationRouteLine_gray);
-                    unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.white_unselected_bike);
-                    selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_selected_bike);
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.gray_user_location);
-                }
-                R.style.AppTheme_PapaBless -> {
-                    mapboxMap.setStyle(getString(R.string.papa_bless_map_style))
-                    navigationLineColor = resources.getColor(R.color.navigationRouteLine_neutral)
-                    unselectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless)
-                    selectedMarkerIcon = IconFactory.getInstance(context).fromResource(R.drawable.marker_papa_bless_selected)
-                    mockLocationIcon = IconFactory.getInstance(context).fromResource(R.drawable.neutral_orange_user_location)
-                }
-
-            }
+        init {
+            mapboxMap.setStyle(getString(R.string.papa_bless_map_style))
         }
 
-        private fun showBuildingExtrusions() {
-            // Use the Mapbox building plugin to display and customize the opacity/color of building extrusions
-            val buildingPlugin = BuildingPlugin(mapView, mapboxMap)
-            buildingPlugin.setVisibility(true)
-            buildingPlugin.setOpacity(BUILDING_EXTRUSION_OPACITY)
-            buildingPlugin.setColor(Color.parseColor(BUILDING_EXTRUSION_COLOR))
-        }
+
     }
 
     companion object {
@@ -508,9 +430,11 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
             .include(LatLng(51.412056,-57.260742))
             .include(LatLng(12.538749,-148.103516))
             .build()
-        private val MOCK_DEVICE_LOCATION_LAT_LNG = LatLng(34.082676, -118.366671)
+        private val MOCK_DEVICE_LOCATION_LAT_LNG = LatLng(37.788003, -122.416372)
+        //private val MOCK_DEVICE_LOCATION_LAT_LNG = LocationServices.FusedLocationApi.lastLocation
         private val MAPBOX_LOGO_OPACITY = 75
         private val CAMERA_MOVEMENT_SPEED_IN_MILSECS = 1200
         private val NAVIGATION_LINE_WIDTH = 9f
     }
 }
+

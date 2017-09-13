@@ -2,7 +2,7 @@
 
 ![PapaBless](https://github.com/shavit/PapaBless/blob/master/doc/preview.png?raw=true)
 
-Store Locator
+Store Locator with offline data (US Only)
 * Android
 * MapBox
 * GIS
