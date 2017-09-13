@@ -2786,5 +2786,5 @@
 {"type": "Feature","properties": {"name": "Cheyenne, WY 82009-4917","hours": "9am - 3am","phone": "(307)772-0000","description": "1958B DELL RANGE BLVD"},"geometry": {"type": "Point", "coordinates": [41.14512917211527,-104.79037777295702]}},
 {"type": "Feature","properties": {"name": "Gillette, WY 82716","hours": "9am - 3am","phone": "(307)687-7272","description": "800 E. 2ND STREET"},"geometry": {"type": "Point", "coordinates": [44.279199821347085,-105.50500174573668]}},
 {"type": "Feature","properties": {"name": "Laramie, WY 82072-3011","hours": "9am - 3am","phone": "(307)742-7272","description": "553 N 3RD ST"},"geometry": {"type": "Point", "coordinates": [41.30949407927279,-105.60962743082862]}},
-{"type": "Feature","properties": {"name": "Sheridan, WY 82801","hours": "9am - 3am","phone": "(307)675-1111","description": "856 COFFEEN AVE"},"geometry": {"type": "Point", "coordinates": [44.79486016386193,-106.96115257915396]}},
+{"type": "Feature","properties": {"name": "Sheridan, WY 82801","hours": "9am - 3am","phone": "(307)675-1111","description": "856 COFFEEN AVE"},"geometry": {"type": "Point", "coordinates": [44.79486016386193,-106.96115257915396]}}
 ]}
