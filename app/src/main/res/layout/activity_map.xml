@@ -23,13 +23,18 @@
         mapbox:mapbox_cameraTilt="48"
         mapbox:mapbox_cameraZoom="12"
         mapbox:mapbox_cameraZoomMin="10"
-        mapbox:mapbox_uiAttribution="false"/>
+        mapbox:mapbox_uiAttribution="false">
+
+    </com.mapbox.mapboxsdk.maps.MapView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/map_layout_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp">
+
+    </android.support.v7.widget.RecyclerView>
+
 
 </FrameLayout>

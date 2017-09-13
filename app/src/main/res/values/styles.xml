@@ -36,7 +36,7 @@
     </style>
 
     <!--Papa Bless theme -->
-    <style name="AppTheme.PapaBless" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.PapaBless" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorPrimary_green</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_green</item>
         <item name="colorAccent">@color/colorAccent_green</item>
