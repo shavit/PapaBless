@@ -113,7 +113,16 @@ class MapActivity : AppCompatActivity(), LocationRecyclerViewAdapter.ClickListen
                 val singleLocationPosition = singleLocation.geometry.coordinates as Position
 
                 // Create a new LatLng object with the Position object created above
-                val singleLocationLatLng = LatLng(singleLocationPosition.latitude, singleLocationPosition.longitude)
+                var singleLocationLatLng: LatLng? = null
+                try {
+                    singleLocationLatLng = LatLng(singleLocationPosition.latitude,
+                            singleLocationPosition.longitude)
+                } catch (e: Exception){
+                    println(x)
+                    println(singleLocation)
+                    println(e)
+                    break
+                }
 
                 // Add the location to the Arraylist of locations for later use in the recyclerview
                 listOfIndividualLocations!!.add(IndividualLocation(
